@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Push Docker Image
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout app repo
+      - name: Checkout App Repo
         uses: actions/checkout@v4
 
       - name: Login to DockerHub
@@ -21,20 +21,20 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo:${{ github.sha }} .
+          docker build -t sunaodisha/demo:${{ github.sha }} .
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/demo:${{ github.sha }}
+          docker push sunaodisha/demo:${{ github.sha }}
 
-      - name: Checkout GitOps Repo
+      - name: Clone GitOps Repo
         run: |
           git clone https://${{ secrets.GITOPS_TOKEN }}@github.com/sunaofficials/cisco-gitops.git
 
       - name: Update Image Tag in GitOps Repo
         run: |
           cd cisco-gitops/base
-          sed -i "s|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/demo:${{ github.sha }}|" deployment.yaml
+          sed -i "s|image:.*|image: sunaodisha/demo:${{ github.sha }}|" deployment.yaml
           cd ..
           git config user.name "github-actions"
           git config user.email "actions@github.com"
