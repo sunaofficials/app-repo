@@ -29,7 +29,7 @@ jobs:
 
       - name: Checkout GitOps Repo
         run: |
-          git clone https://${{ secrets.GITOPS_TOKEN }}@github.com/YOUR_USERNAME/cisco-gitops.git
+          git clone https://${{ secrets.GITOPS_TOKEN }}@github.com/sunaofficials/cisco-gitops.git
 
       - name: Update Image Tag in GitOps Repo
         run: |
